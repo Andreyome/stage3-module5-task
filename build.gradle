@@ -1,0 +1,58 @@
+plugins {
+    id 'java-base'
+}
+
+wrapper {
+    gradleVersion = gradlewVersion
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    group = 'com.mjc.school'
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "org.springframework:spring-context:$springVersion"
+        testImplementation "org.springframework:spring-test:$springVersion"
+        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
+        testImplementation "com.tngtech.archunit:archunit:$archUnitVersion"
+        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
+        testImplementation 'org.assertj:assertj-core:3.19.0'
+        implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.7.7"
+        implementation 'com.h2database:h2:2.1.214'
+        implementation 'javax.xml.bind:jaxb-api:2.3.1'
+        implementation 'javax.validation:validation-api:2.0.1.Final'
+        annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+        implementation "org.mapstruct:mapstruct:$mapstructVersion"
+
+        implementation "org.hibernate.validator:hibernate-validator:7.0.2.Final"
+
+    }
+    test {
+        useJUnitPlatform()
+    }
+}
+
+task repack(type: Jar, dependsOn: ':module-main:build') {
+    if (findProject(':module-main') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildJar = zipTree("${project(':module-main').buildDir}/libs/module-main.jar")
+        from(buildJar) { into('/') }
+        manifest {
+            attributes(
+                    'Main-Class': 'com.mjc.school.Main'
+            )
+        }
+    }
+}

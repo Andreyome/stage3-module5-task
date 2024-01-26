@@ -1,0 +1,6 @@
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.springframework:spring-aspects:6.0.11'
+    implementation 'com.github.shalousun:datasource-aspect:0.1'
+}

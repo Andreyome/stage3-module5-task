@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':module-repository')
+    implementation 'org.springframework:spring-aspects:6.0.11'
+}
