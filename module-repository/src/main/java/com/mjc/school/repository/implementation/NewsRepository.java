@@ -1,12 +1,16 @@
 package com.mjc.school.repository.implementation;
 
 import com.mjc.school.repository.BaseRepository;
+import com.mjc.school.repository.model.impl.AuthorModel;
 import com.mjc.school.repository.model.impl.NewsModel;
+import com.mjc.school.repository.model.impl.TagModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +54,32 @@ public class NewsRepository implements BaseRepository<NewsModel, Long> {
         } catch (Exception e) {
             return false;
         }
+    }
+    public List<NewsModel> readNewsByParams(Optional<List<Long>> tagsIds,Optional<List<String>>tagsNames,Optional<String> authorName, Optional<String> title,Optional<String> content){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<NewsModel> criteriaQuery = criteriaBuilder.createQuery(NewsModel.class);
+        Root<NewsModel> root = criteriaQuery.from(NewsModel.class);
+        List<Predicate> pr = new ArrayList<>();
+        if(tagsIds.isPresent()){
+            Join<TagModel,NewsModel> nt= root.join("tags");
+            pr.add(nt.get("id").in(tagsIds.get()));
+        }
+        if(tagsNames.isPresent()){
+            Join<TagModel,NewsModel> nt = root.join("tags");
+            pr.add(nt.get("name").in(tagsNames.get()));
+        }
+        if(authorName.isPresent()){
+            Join<AuthorModel,NewsModel> na = root.join("authors");
+            pr.add(na.get("name").in("authors"));
+        }
+        if(title.isPresent()){
+            pr.add(criteriaBuilder.like(root.get("title"),"%"+title.get()+"%"));
+        }
+        if (content.isPresent()){
+            pr.add(criteriaBuilder.like(root.get("content"),"%"+content.get()+"%"));
+        }
+        criteriaQuery.select(root).distinct(true).where(pr.toArray(new Predicate[0]));
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override

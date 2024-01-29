@@ -10,10 +10,11 @@ import java.util.Objects;
 
 @Entity
 @Component
-@Table(name = "Tags")
+@Table(name = "tags")
 public class TagModel implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "name",nullable = false)
     @Size(min = 3,max = 15,message = "Name is incorrect!")

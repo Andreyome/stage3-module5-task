@@ -8,48 +8,46 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 @Entity
-@Table(name = "authors")
-public class AuthorModel implements BaseEntity<Long> {
+@Table(name = "comments")
+public class CommentModel implements BaseEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name",nullable = false)
-    @Size(min = 3,max = 15,message = "Name is incorrect!")
-    private String name;
-    @Column(name = "createDate",nullable = false)
+
+    @Column(name = "content", nullable = false)
+    @Size(min = 5, max = 255, message = "Content is incorrect!")
+    private String content;
+    @Column(name = "createDate", nullable = false)
     @CreatedDate
     private LocalDateTime createDate;
-    @Column(name = "lastUpdateDate",nullable = false)
+    @Column(name = "lastUpdateDate", nullable = false)
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
-    @OneToMany(mappedBy = "authorModel",cascade = CascadeType.REMOVE)
-    private List<NewsModel> newsModelList;
-    public AuthorModel() {
-    }
-    public AuthorModel(String name,LocalDateTime createDate,LocalDateTime lastUpdateDate) {
-        this.name = name;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "news_id")
+    private NewsModel newsModel;
 
+    @Override
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public LocalDateTime getCreateDate() {
@@ -66,5 +64,13 @@ public class AuthorModel implements BaseEntity<Long> {
 
     public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public NewsModel getNewsModel() {
+        return newsModel;
+    }
+
+    public void setNewsModel(NewsModel newsModel) {
+        this.newsModel = newsModel;
     }
 }

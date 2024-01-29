@@ -59,19 +59,4 @@ public class NewsService implements BaseService<NewsDtoRequest, NewsDtoResponse,
         return newsRepository.deleteById(id);
     }
 
-    public List<NewsDtoResponse> readNewsByParams(Optional<List<Long>> tagsIds,Optional<List<String>>tagsNames,Optional<String> authorName, Optional<String> title,Optional<String> content){
-        List<NewsDtoResponse> result= readAll();
-        if(title.isPresent()) {
-            List<NewsDtoResponse> tmp = result.stream().filter(x -> x.getTitle().equals(title.get())).toList();
-            result = tmp;
-        }
-        if (content.isPresent()){
-            List<NewsDtoResponse> tmp = result.stream().filter(x -> x.getContent().equals(content.get())).toList();
-            result=tmp;
-        }
-        if(authorName.isPresent()){
-            List<NewsDtoResponse> tmp = result.stream().filter(x -> x.getAuthorId().equals(authorName.get())).toList();
-        }
-        return result;
-    }
 }

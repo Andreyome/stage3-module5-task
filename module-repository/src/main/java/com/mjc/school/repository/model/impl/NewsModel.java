@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Objects;
 @Entity
 @Component
-@Table(name = "News")
+@Table(name = "news")
 public class NewsModel implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "title",nullable = false)
     @Size(min = 5,max = 30,message = "Title is incorrect!")
@@ -33,8 +34,12 @@ public class NewsModel implements BaseEntity<Long> {
     @JoinColumn(name = "author_id")
     private AuthorModel authorModel;
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "news_tags",joinColumns =@JoinColumn(name = "news_id" ), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JoinTable(name = "news_tags",joinColumns =@JoinColumn(name = "news_Id" ), inverseJoinColumns = @JoinColumn(name = "tags_Id"))
     private List<TagModel> tagModelList;
+    @OneToMany(mappedBy = "commentModel", cascade = CascadeType.REMOVE)
+    private List<CommentModel> commentsModelList;
+
+
     public NewsModel(){}
 
     public NewsModel(String title, String content, LocalDateTime createDate, LocalDateTime lastUpdateDate, AuthorModel authorModel,List<TagModel> tagModelList) {
