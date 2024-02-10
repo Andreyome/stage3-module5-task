@@ -31,7 +31,7 @@ public class TagsController implements RestTagsController {
     @Override
     @GetMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public TagDtoResponse readById(Long id) {
+    public TagDtoResponse readById(@PathVariable Long id) {
         return tagsService.readById(id);
     }
 

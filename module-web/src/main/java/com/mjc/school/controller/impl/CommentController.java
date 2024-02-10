@@ -33,14 +33,14 @@ public class CommentController implements RestCommentController {
     @Override
     @GetMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDtoResponse readById(@RequestParam Long id) {
+    public CommentDtoResponse readById(@PathVariable Long id) {
         return commentService.readById(id);
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDtoResponse create(CommentDtoRequest createRequest) {
+    public CommentDtoResponse create(@RequestBody CommentDtoRequest createRequest) {
         return commentService.create(createRequest);
     }
 
