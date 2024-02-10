@@ -29,6 +29,7 @@ subprojects {
         testImplementation 'org.assertj:assertj-core:3.19.0'
         implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-web:2.7.7'
         implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.7.7"
         implementation 'com.h2database:h2:2.1.214'
         implementation 'javax.xml.bind:jaxb-api:2.3.1'

@@ -1,7 +1,8 @@
 package com.mjc.school.repository.implementation;
 
-import com.mjc.school.repository.BaseRepository;
+import com.mjc.school.repository.NewsRepInterface;
 import com.mjc.school.repository.model.impl.AuthorModel;
+import com.mjc.school.repository.model.impl.CommentModel;
 import com.mjc.school.repository.model.impl.NewsModel;
 import com.mjc.school.repository.model.impl.TagModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class NewsRepository implements BaseRepository<NewsModel, Long> {
+public class NewsRepository implements NewsRepInterface {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -25,8 +26,12 @@ public class NewsRepository implements BaseRepository<NewsModel, Long> {
     }
 
     @Override
-    public List<NewsModel> readAll() {
-        return entityManager.createQuery("select a from NewsModel a", NewsModel.class).getResultList();
+    public List<NewsModel> readAll(Integer page, Integer limit, String sortBy) {
+        String request = "select a from NewsModel a";
+        if(sortBy!=null){
+            request +=" order by " +sortBy;
+        }
+        return entityManager.createQuery(request, NewsModel.class).setFirstResult(page-1).setMaxResults((page-1)*limit).getResultList();
     }
 
     @Override

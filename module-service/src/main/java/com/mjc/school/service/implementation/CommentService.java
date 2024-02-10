@@ -1,8 +1,10 @@
 package com.mjc.school.service.implementation;
 
+import com.mjc.school.repository.CommentsRepInterface;
 import com.mjc.school.repository.implementation.CommentRepository;
 import com.mjc.school.repository.model.impl.CommentModel;
 import com.mjc.school.service.BaseService;
+import com.mjc.school.service.CommentServInterface;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import com.mjc.school.service.mapper.CommentMapper;
@@ -14,20 +16,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CommentService implements BaseService<CommentDtoRequest, CommentDtoResponse,Long> {
+public class CommentService implements CommentServInterface {
     private final CommentMapper mapper;
-    private final CommentRepository repository;
+    private final CommentsRepInterface repository;
 
 
 
     @Autowired
-    public CommentService(CommentMapper mapper,CommentRepository repository){
+    public CommentService(CommentMapper mapper,CommentsRepInterface repository){
         this.mapper=mapper;
         this.repository=repository;
     }
     @Override
-    public List<CommentDtoResponse> readAll() {
-        return mapper.commentListToDto(repository.readAll());
+    public List<CommentDtoResponse> readAll(Integer page, Integer limit, String sortBy) {
+        return mapper.commentListToDto(repository.readAll(page,limit, sortBy));
     }
 
     @Override
@@ -63,5 +65,10 @@ public class CommentService implements BaseService<CommentDtoRequest, CommentDto
         else {
             throw new EntityNotFoundException("Comment with provided Id not Found!");
         }
+    }
+
+    @Override
+    public List<CommentDtoResponse> readByNewsId(Long id) {
+        return mapper.commentListToDto(repository.readByNewsId(id));
     }
 }

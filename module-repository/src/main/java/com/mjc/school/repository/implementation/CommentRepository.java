@@ -1,17 +1,20 @@
 package com.mjc.school.repository.implementation;
 
 import com.mjc.school.repository.BaseRepository;
+import com.mjc.school.repository.CommentsRepInterface;
+import com.mjc.school.repository.model.impl.AuthorModel;
 import com.mjc.school.repository.model.impl.CommentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CommentRepository implements BaseRepository<CommentModel, Long> {
+public class CommentRepository implements CommentsRepInterface {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -21,8 +24,12 @@ public class CommentRepository implements BaseRepository<CommentModel, Long> {
 
 
     @Override
-    public List<CommentModel> readAll() {
-        return entityManager.createQuery("select a from CommentModel a", CommentModel.class).getResultList();
+    public List<CommentModel> readAll(Integer page, Integer limit, String sortBy) {
+        String request = "select a from CommentModel a";
+        if(sortBy!=null){
+            request +=" order by " +sortBy;
+        }
+        return entityManager.createQuery(request, CommentModel.class).setFirstResult(page-1).setMaxResults((page-1)*limit).getResultList();
     }
 
     @Override
@@ -55,5 +62,15 @@ public class CommentRepository implements BaseRepository<CommentModel, Long> {
     @Override
     public boolean existById(Long id) {
         return readById(id).isPresent();
+    }
+
+    @Override
+    public List<CommentModel> readByNewsId(Long id) {
+        try{
+            return entityManager.createQuery("SELECT c FROM CommentModel c INNER JOIN c.newsModel n WHERE n.id =:id", CommentModel.class).setParameter("id",id).getResultList();
+        }
+        catch(Exception e) {
+            throw new EntityNotFoundException("No such news with provided ID");
+        }
     }
 }

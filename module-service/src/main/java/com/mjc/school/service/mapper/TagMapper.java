@@ -7,14 +7,16 @@ import com.mjc.school.service.dto.TagDtoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-@Mapper
-public interface TagMapper {
-    TagMapper INSTANCE = Mappers.getMapper(TagMapper.class);
 
+
+import java.util.List;
+
+@Mapper(componentModel = "spring")
+public interface TagMapper {
+
+    List<TagDtoResponse> modelListToDto(List<TagModel> tagModelList);
     TagDtoResponse tagToDto(TagModel tagModel);
 
-    @Mappings({
-            @Mapping(target = "newsModelList", ignore = true)})
+    @Mapping(target = "newsModelList", ignore = true)
     TagModel tagDtoToModel(TagDtoRequest newsDtoRequest);
 }

@@ -120,4 +120,12 @@ public class NewsModel implements BaseEntity<Long> {
     public List<TagModel> getTagModelList(){
         return tagModelList;
     }
+
+    public List<CommentModel> getCommentsModelList() {
+        return commentsModelList;
+    }
+
+    public void setCommentsModelList(List<CommentModel> commentsModelList) {
+        this.commentsModelList = commentsModelList;
+    }
 }

@@ -6,12 +6,12 @@ import com.mjc.school.service.dto.AuthorDtoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface AuthorMapper {
-    AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
-
+    List <AuthorDtoResponse> authorModelListToDto(List<AuthorModel> list);
     AuthorDtoResponse authorModelToDto(AuthorModel model);
     @Mappings({
             @Mapping(target = "createDate", ignore = true),

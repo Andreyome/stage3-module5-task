@@ -1,55 +1,69 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
-import com.mjc.school.controller.annotations.CommandBody;
-import com.mjc.school.controller.annotations.CommandHandler;
-import com.mjc.school.controller.annotations.CommandParam;
-import com.mjc.school.service.BaseService;
+import com.mjc.school.controller.RestAuthorController;
+import com.mjc.school.service.AuthorServInterface;
 import com.mjc.school.service.dto.AuthorDtoRequest;
 import com.mjc.school.service.dto.AuthorDtoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Component
-@Controller
-public class AuthorController implements BaseController<AuthorDtoRequest, AuthorDtoResponse, Long> {
-    BaseService<AuthorDtoRequest, AuthorDtoResponse, Long> authorService;
+@RestController
+@RequestMapping(value = "/author", consumes = {"application/JSON"}, produces = {"application/JSON", "application/XML"})
+public class AuthorController implements RestAuthorController {
+    private final AuthorServInterface authorService;
 
     @Autowired
-    public AuthorController(BaseService<AuthorDtoRequest, AuthorDtoResponse, Long> authorService) {
+    public AuthorController(AuthorServInterface authorService) {
         this.authorService = authorService;
     }
 
     @Override
-    @CommandHandler(value = "readAllAuthors")
-    public List<AuthorDtoResponse> readAll() {
-        return authorService.readAll();
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<AuthorDtoResponse> readAll(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                           @RequestParam(value = "limit", required = false,defaultValue = "5") Integer limit,
+                                           @RequestParam(value = "sortBy",required = false,defaultValue = "name") String sortBy) {
+        return authorService.readAll( page,  limit, sortBy);
     }
 
     @Override
-    @CommandHandler(value = "readAuthorById")
-    public AuthorDtoResponse readById(@CommandParam("authorId") Long id) {
+    @GetMapping(value = "/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorDtoResponse readById(@PathVariable Long id) {
         return authorService.readById(id);
     }
 
     @Override
-    @CommandHandler(value = "createAuthor")
-    public AuthorDtoResponse create(@CommandBody AuthorDtoRequest createRequest) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AuthorDtoResponse create(@RequestBody AuthorDtoRequest createRequest) {
         return authorService.create(createRequest);
     }
 
     @Override
-    @CommandHandler(value = "updateAuthor")
-    public AuthorDtoResponse update(@CommandBody AuthorDtoRequest updateRequest) {
+    @PutMapping("/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorDtoResponse update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
         return authorService.update(updateRequest);
     }
 
     @Override
-    @CommandHandler(value = "deleteAuthorById")
-    public boolean deleteById(@CommandParam("authorId") Long id) {
-        return authorService.deleteById(id);
+    @DeleteMapping(value = "/{id:\\d+}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) {
+        authorService.deleteById(id);
+    }
+
+    @Override
+    @GetMapping(value = "/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorDtoResponse getAuthorByNewsId(@PathVariable Long id) {
+        return authorService.getAuthorByNewsId(id);
     }
 }
