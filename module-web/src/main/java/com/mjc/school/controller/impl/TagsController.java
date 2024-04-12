@@ -1,9 +1,13 @@
 package com.mjc.school.controller.impl;
 
-import com.mjc.school.controller.RestTagsController;
+import com.mjc.school.controller.BaseController;
 import com.mjc.school.service.TagServInterface;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -12,8 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @Component
 @RestController
-@RequestMapping(value = "/tag", consumes = {"application/JSON"}, produces = {"application/JSON", "application/XML"})
-public class TagsController implements RestTagsController {
+@RequestMapping(value = "/tag",  produces = {"application/JSON"})
+@Api(produces = "application/JSON", value = "CRUD operations with Tags")
+public class TagsController implements BaseController<TagDtoRequest, TagDtoResponse,Long> {
     private TagServInterface tagsService;
     @Autowired
     public  TagsController(TagServInterface tagsService){
@@ -22,15 +27,31 @@ public class TagsController implements RestTagsController {
     @Override
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all tags", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "Successfully retrieved all tags"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized access"),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Internal resource not found")
+    })
     public List<TagDtoResponse> readAll(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                                         @RequestParam(value = "limit", required = false,defaultValue = "5") Integer limit,
-                                        @RequestParam(value = "sortBy",required = false,defaultValue = "name") String sortBy) {
+                                        @RequestParam(value = "sortBy",required = false,defaultValue = "name:desc") String sortBy) {
         return tagsService.readAll( page, limit, sortBy);
     }
 
     @Override
     @GetMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get tags by Id", response = TagDtoResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "Successfully retrieved tag by Id"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized access"),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Internal resource not found")
+    })
     public TagDtoResponse readById(@PathVariable Long id) {
         return tagsService.readById(id);
     }
@@ -38,6 +59,14 @@ public class TagsController implements RestTagsController {
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create tag", response = TagDtoResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "Successfully created tag"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized access"),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Internal resource not found")
+    })
     public TagDtoResponse create(@RequestBody TagDtoRequest createRequest) {
         return tagsService.create(createRequest);
     }
@@ -45,21 +74,31 @@ public class TagsController implements RestTagsController {
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update tag", response = TagDtoResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "Successfully updated tag"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized access"),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Internal resource not found")
+    })
     public TagDtoResponse update(@PathVariable Long id,@RequestBody TagDtoRequest updateRequest) {
-        return tagsService.update(updateRequest);
+        return tagsService.update(id, updateRequest);
     }
 
     @Override
     @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete tag by Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204,message = "Successfully deleted tag by Id"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized access"),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Internal resource not found")
+    })
     public void deleteById(@PathVariable Long id) {
         tagsService.deleteById(id);
     }
 
-    @Override
-    @GetMapping(value = "/{id:\\d+}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<TagDtoResponse> getTagsByNewsId(@PathVariable Long id) {
-        return tagsService.readByNewsId(id);
-    }
 }

@@ -37,7 +37,9 @@ subprojects {
         annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
 
-        implementation "org.hibernate.validator:hibernate-validator:7.0.2.Final"
+
+
+        runtimeOnly 'com.h2database:h2'
 
     }
     test {
@@ -45,15 +47,15 @@ subprojects {
     }
 }
 
-task repack(type: Jar, dependsOn: ':module-main:build') {
-    if (findProject(':module-main') != null) {
-        entryCompression = ZipEntryCompression.STORED
-        def buildJar = zipTree("${project(':module-main').buildDir}/libs/module-main.jar")
-        from(buildJar) { into('/') }
-        manifest {
-            attributes(
-                    'Main-Class': 'com.mjc.school.Main'
-            )
-        }
-    }
-}
+//task repack(type: Jar, dependsOn: ':module-main:build') {
+//    if (findProject(':module-main') != null) {
+//        entryCompression = ZipEntryCompression.STORED
+//        def buildJar = zipTree("${project(':module-main').buildDir}/libs/module-main.jar")
+//        from(buildJar) { into('/') }
+//        manifest {
+//            attributes(
+//                    'Main-Class': 'com.mjc.school.Main'
+//            )
+//        }
+//    }
+//}

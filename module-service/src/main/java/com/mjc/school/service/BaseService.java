@@ -9,7 +9,7 @@ public interface BaseService<T, R, K> {
 
     R create(T createRequest);
 
-    R update(T updateRequest);
+    R update(K id, T updateRequest);
 
     boolean deleteById(K id);
 }

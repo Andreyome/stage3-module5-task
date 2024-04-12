@@ -13,7 +13,7 @@ public interface BaseRepository<T extends BaseEntity<K>, K> {
 
     T create(T entity);
 
-    T update(T entity);
+    T update(K id,T entity);
 
     boolean deleteById(K id);
 

@@ -6,8 +6,8 @@ import java.util.List;
 public record NewsDtoResponse(Long id,
                               String content,
                               String title,
-                              LocalDateTime createDate,
-                              LocalDateTime lastUpdateDate,
+                              String createDate,
+                              String lastUpdateDate,
                               AuthorDtoResponse authorDto,
                               List<TagDtoResponse> tagDtoResponseList,
                               List<CommentDtoResponse> commentDtoResponseList) {

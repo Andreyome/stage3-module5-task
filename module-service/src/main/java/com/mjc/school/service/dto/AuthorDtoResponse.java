@@ -4,6 +4,6 @@ import java.time.LocalDateTime;
 
 public record AuthorDtoResponse(Long id,
                                 String name,
-                                LocalDateTime createDate,
-                                LocalDateTime lastUpdateDate) {
+                                String createDate,
+                                String lastUpdateDate) {
 }

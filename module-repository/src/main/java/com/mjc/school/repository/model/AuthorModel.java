@@ -1,0 +1,68 @@
+package com.mjc.school.repository.model;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@Entity
+@Table(name = "authors")
+@EntityListeners(AuditingEntityListener.class)
+public class AuthorModel implements BaseEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "name",nullable = false)
+    private String name;
+    @Column(name = "createDate",nullable = false)
+    @CreatedDate
+    private LocalDateTime createDate;
+    @Column(name = "lastUpdateDate",nullable = false)
+    @LastModifiedDate
+    private LocalDateTime lastUpdateDate;
+    @OneToMany(mappedBy = "authorModel",cascade = CascadeType.REMOVE)
+    private List<NewsModel> newsModelList;
+    public AuthorModel() {
+    }
+    public AuthorModel(String name,LocalDateTime createDate,LocalDateTime lastUpdateDate) {
+        this.name = name;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+}

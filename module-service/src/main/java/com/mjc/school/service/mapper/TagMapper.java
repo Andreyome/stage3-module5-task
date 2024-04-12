@@ -1,12 +1,11 @@
 package com.mjc.school.service.mapper;
 
 
-import com.mjc.school.repository.model.impl.TagModel;
+import com.mjc.school.repository.model.TagModel;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 
 import java.util.List;
@@ -14,9 +13,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TagMapper {
 
-    List<TagDtoResponse> modelListToDto(List<TagModel> tagModelList);
+    List<TagDtoResponse> tagListToDto(List<TagModel> tagModelList);
     TagDtoResponse tagToDto(TagModel tagModel);
 
     @Mapping(target = "newsModelList", ignore = true)
+    @Mapping(target = "id",ignore = true)
     TagModel tagDtoToModel(TagDtoRequest newsDtoRequest);
 }

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public record NewsDtoRequest(@Min(1) @Max(Long.MAX_VALUE) @NotNull Long id,
+public record NewsDtoRequest(
                              @Size(min = 5, max = 255)
                              @NotNull
                              String content,
@@ -15,8 +15,7 @@ public record NewsDtoRequest(@Min(1) @Max(Long.MAX_VALUE) @NotNull Long id,
                              @Max(30)
                              @NotNull
                              String title,
-                             Long authorId,
-                             List<Long> commentIds,
-                             List<Long> tagIds
+                             String authorName,
+                             List<String> tagNames
 ) {
 }
