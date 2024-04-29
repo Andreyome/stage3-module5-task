@@ -14,7 +14,7 @@ public class TagModel implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name",nullable = false,unique = true)
     private String name;
     @ManyToMany(mappedBy = "tagModelList", fetch = FetchType.LAZY)
     private List<NewsModel> newsModelList;

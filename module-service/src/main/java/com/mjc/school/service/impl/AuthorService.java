@@ -6,6 +6,7 @@ import com.mjc.school.service.AuthorServInterface;
 import com.mjc.school.service.dto.AuthorDtoRequest;
 import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.exception.NotFoundException;
+import com.mjc.school.service.exception.ValidationException;
 import com.mjc.school.service.mapper.AuthorMapper;
 import com.mjc.school.service.validate.Validator;
 import org.mapstruct.factory.Mappers;
@@ -48,12 +49,18 @@ public class AuthorService implements AuthorServInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(AuthorDtoRequest createRequest) {
+        if(authorRepositoryImpl.readByName(createRequest.name()).isPresent()){
+            throw new ValidationException("Provided author name has already been taken.");
+        }
         return mapper.authorModelToDto(authorRepositoryImpl.create(mapper.authorDtoToModel(validator.validateAuthor(createRequest))));
     }
 
     @Override
     @Transactional
     public AuthorDtoResponse update(Long id,AuthorDtoRequest updateRequest) {
+        if(!authorRepositoryImpl.existById(id)){
+            throw new NotFoundException("No author with provided id found");
+        }
         return mapper.authorModelToDto(authorRepositoryImpl.update(id, mapper.authorDtoToModel(validator.validateAuthor(updateRequest))));
     }
 

@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.hateoas.EntityModel;
 @RestController
 @RequestMapping(value = "/author", produces = {"application/JSON"})
 @Api (produces = "application/JSON", value = "CRUD operations with Authors")
@@ -106,4 +108,8 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
         authorService.deleteById(id);
     }
 
+    public static void addHateoas(AuthorDtoResponse authorDtoResponse, Long id){
+        authorDtoResponse.add(linkTo(methodOn(AuthorController.class).readById(id)).withSelfRel());
+
+    }
 }

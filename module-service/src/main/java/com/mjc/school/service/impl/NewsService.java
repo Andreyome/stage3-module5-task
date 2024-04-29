@@ -9,6 +9,7 @@ import com.mjc.school.repository.model.TagModel;
 import com.mjc.school.service.NewsServInterface;
 import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.dto.NewsDtoResponse;
+import com.mjc.school.service.exception.NotFoundException;
 import com.mjc.school.service.mapper.NewsMapper;
 import com.mjc.school.service.validate.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class NewsService implements NewsServInterface {
         Optional<NewsModel> newsModelOptional = newsRepository.readById(id);
         if (newsModelOptional.isPresent()) {
             return mapper.newsToDto(newsModelOptional.get());
-        } else throw new RuntimeException("No news with such id found");
+        } else throw new NotFoundException("No news with such id found");
     }
 
     @Override
@@ -69,6 +70,9 @@ public class NewsService implements NewsServInterface {
     @Override
     @Transactional
     public NewsDtoResponse update(Long id, NewsDtoRequest updateRequest) {
+        if(!newsRepository.existById(id)){
+            throw new NotFoundException("No news with provided id found");
+        }
         validator.validateNews(updateRequest);
         createNonExistingAuthor(updateRequest.authorName());
         createNonExistingTags(updateRequest.tagNames());

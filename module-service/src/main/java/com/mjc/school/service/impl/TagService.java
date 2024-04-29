@@ -5,6 +5,7 @@ import com.mjc.school.repository.model.TagModel;
 import com.mjc.school.service.TagServInterface;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
+import com.mjc.school.service.exception.NotFoundException;
 import com.mjc.school.service.mapper.TagMapper;
 import com.mjc.school.service.validate.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,9 @@ public class TagService implements TagServInterface {
     @Override
     @Transactional
     public TagDtoResponse update(Long id, TagDtoRequest updateRequest) {
+        if(!tagRepository.existById(id)){
+            throw new NotFoundException("No tags with provided id found");
+        }
         return mapper.tagToDto(tagRepository.update(id, mapper.tagDtoToModel(validator.validateTag(updateRequest))));
     }
 
