@@ -49,9 +49,9 @@ public class AuthorService implements AuthorServInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(AuthorDtoRequest createRequest) {
-        if(authorRepositoryImpl.readByName(createRequest.name()).isPresent()){
-            throw new ValidationException("Provided author name has already been taken.");
-        }
+//        if(authorRepositoryImpl.readByName(createRequest.name()).isPresent()){
+//            throw new ValidationException("Provided author name has already been taken.");
+//        }
         return mapper.authorModelToDto(authorRepositoryImpl.create(mapper.authorDtoToModel(validator.validateAuthor(createRequest))));
     }
 

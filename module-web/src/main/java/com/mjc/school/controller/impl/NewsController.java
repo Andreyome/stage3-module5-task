@@ -1,6 +1,7 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.*;
 import com.mjc.school.service.dto.*;
 import io.swagger.annotations.Api;
@@ -8,12 +9,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RestController
@@ -64,8 +65,10 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public NewsDtoResponse readById(@PathVariable Long id) {
-        return newsService.readById(id);
+    public EntityModel<NewsDtoResponse> readById(@PathVariable Long id) {
+        EntityModel<NewsDtoResponse> result = EntityModel.of(newsService.readById(id));
+        HateoasHelper.addNewsLinks(result);
+        return result;
     }
 
     @Override
@@ -79,8 +82,10 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public NewsDtoResponse create(@RequestBody NewsDtoRequest createRequest) {
-        return newsService.create(createRequest);
+    public EntityModel<NewsDtoResponse> create(@RequestBody NewsDtoRequest createRequest) {
+        EntityModel<NewsDtoResponse> result = EntityModel.of(newsService.create(createRequest));
+        HateoasHelper.addNewsLinks(result);
+        return result;
     }
 
     @Override
@@ -94,8 +99,10 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public NewsDtoResponse update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
-        return newsService.update(id,updateRequest);
+    public EntityModel<NewsDtoResponse> update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
+        EntityModel<NewsDtoResponse> result = EntityModel.of(newsService.update(id,updateRequest));
+        HateoasHelper.addNewsLinks(result);
+        return result;
     }
 
     @Override

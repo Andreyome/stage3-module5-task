@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EntityScan(basePackages = {"com.mjc.school.repository"})
 @EnableWebMvc
 @EnableJpaAuditing
+@EnableTransactionManagement
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

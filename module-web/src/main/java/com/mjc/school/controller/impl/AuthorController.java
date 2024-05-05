@@ -1,6 +1,7 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.AuthorServInterface;
 import com.mjc.school.service.dto.AuthorDtoRequest;
 import com.mjc.school.service.dto.AuthorDtoResponse;
@@ -9,15 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import org.springframework.hateoas.EntityModel;
 @RestController
 @RequestMapping(value = "/author", produces = {"application/JSON"})
 @Api (produces = "application/JSON", value = "CRUD operations with Authors")
@@ -59,8 +57,10 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Internal resource not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse readById(@PathVariable Long id) {
-        return authorService.readById(id);
+    public EntityModel<AuthorDtoResponse> readById(@PathVariable Long id) {
+        EntityModel<AuthorDtoResponse> result = EntityModel.of(authorService.readById(id));
+        HateoasHelper.addAuthorLinks(result);
+        return result;
     }
 
     @Override
@@ -68,14 +68,16 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value= "Create author",response = AuthorDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully created author"),
+            @ApiResponse(code = 201,message = "Successfully created author"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 404, message = "Internal resource not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse create(@Valid @RequestBody AuthorDtoRequest createRequest) {
-        return authorService.create( createRequest);
+    public EntityModel<AuthorDtoResponse> create(@Valid @RequestBody AuthorDtoRequest createRequest) {
+        EntityModel<AuthorDtoResponse> result = EntityModel.of(authorService.create(createRequest));
+        HateoasHelper.addAuthorLinks(result);
+        return result;
     }
 
     @Override
@@ -89,8 +91,10 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Internal resource not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
-        return authorService.update(id, updateRequest);
+    public EntityModel<AuthorDtoResponse> update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
+        EntityModel<AuthorDtoResponse> result = EntityModel.of(authorService.update(id,updateRequest));
+        HateoasHelper.addAuthorLinks(result);
+        return result;
     }
 
     @Override
@@ -106,10 +110,5 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     })
     public void deleteById(@PathVariable Long id) {
         authorService.deleteById(id);
-    }
-
-    public static void addHateoas(AuthorDtoResponse authorDtoResponse, Long id){
-        authorDtoResponse.add(linkTo(methodOn(AuthorController.class).readById(id)).withSelfRel());
-
     }
 }

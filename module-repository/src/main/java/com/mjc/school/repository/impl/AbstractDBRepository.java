@@ -3,6 +3,7 @@ package com.mjc.school.repository.impl;
 import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.model.BaseEntity;
 import org.hibernate.PersistentObjectException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -53,13 +54,9 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
 
     @Override
     public T create(T entity) {
-        try {
             entityManager.persist(entity);
+            entityManager.flush();
             return entity;
-        }
-        catch (PersistentObjectException e){
-            throw new RuntimeException("Exception in repository");
-        }
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.CommentServInterface;
+import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import io.swagger.annotations.Api;
@@ -9,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +56,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public CommentDtoResponse readById(@PathVariable Long id) {
-        return commentService.readById(id);
+    public EntityModel<CommentDtoResponse> readById(@PathVariable Long id) {
+        EntityModel<CommentDtoResponse> result = EntityModel.of(commentService.readById(id));
+        HateoasHelper.addCommentLinks(result);
+        return result;
     }
 
     @Override
@@ -68,8 +73,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public CommentDtoResponse create(@RequestBody CommentDtoRequest createRequest) {
-        return commentService.create(createRequest);
+    public EntityModel<CommentDtoResponse> create(@RequestBody CommentDtoRequest createRequest) {
+        EntityModel<CommentDtoResponse> result = EntityModel.of(commentService.create(createRequest));
+        HateoasHelper.addCommentLinks(result);
+        return result;
     }
 
     @Override
@@ -83,8 +90,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public CommentDtoResponse update(@PathVariable Long id, @RequestBody CommentDtoRequest updateRequest) {
-        return commentService.update(id, updateRequest);
+    public EntityModel<CommentDtoResponse> update(@PathVariable Long id, @RequestBody CommentDtoRequest updateRequest) {
+        EntityModel<CommentDtoResponse> result = EntityModel.of(commentService.update(id,updateRequest));
+        HateoasHelper.addCommentLinks(result);
+        return result;
     }
 
     @Override

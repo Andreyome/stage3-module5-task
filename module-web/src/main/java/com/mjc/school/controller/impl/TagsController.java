@@ -1,7 +1,9 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.TagServInterface;
+import com.mjc.school.service.dto.NewsDtoResponse;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
 import io.swagger.annotations.Api;
@@ -9,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +55,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public TagDtoResponse readById(@PathVariable Long id) {
-        return tagsService.readById(id);
+    public EntityModel<TagDtoResponse> readById(@PathVariable Long id) {
+        EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.readById(id));
+        HateoasHelper.addTagLinks(result);
+        return result;
     }
 
     @Override
@@ -67,8 +72,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public TagDtoResponse create(@RequestBody TagDtoRequest createRequest) {
-        return tagsService.create(createRequest);
+    public EntityModel<TagDtoResponse>  create(@RequestBody TagDtoRequest createRequest) {
+        EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.create(createRequest));
+        HateoasHelper.addTagLinks(result);
+        return result;
     }
 
     @Override
@@ -82,8 +89,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public TagDtoResponse update(@PathVariable Long id,@RequestBody TagDtoRequest updateRequest) {
-        return tagsService.update(id, updateRequest);
+    public EntityModel<TagDtoResponse>  update(@PathVariable Long id,@RequestBody TagDtoRequest updateRequest) {
+        EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.update(id,updateRequest));
+        HateoasHelper.addTagLinks(result);
+        return result;
     }
 
     @Override

@@ -3,15 +3,24 @@ package com.mjc.school.repository.impl;
 import com.mjc.school.repository.AuthorRepository;
 import com.mjc.school.repository.model.AuthorModel;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
 @Repository("AuthorRepository")
 public class AuthorRepositoryImpl extends AbstractDBRepository<AuthorModel, Long> implements AuthorRepository {
+    @Override
+    public List<AuthorModel> readAll(Integer page, Integer pageSize, String sortBy) {
+//        if(sortBy.split(":")[0].equalsIgnoreCase("newsCount")){
+//            String str = "SELECT a FROM AuthorModel a JOIN a.newsModelList n GROUP BY a ORDER BY COUNT(n) "+sortBy.split(":")[1];
+//            return entityManager.createQuery(str).getResultList();
+//        }
+        return super.readAll(page, pageSize, sortBy);
+    }
+
     @Override
     void updateExistingModel(AuthorModel existingEntity, AuthorModel updatedEntity) {
         existingEntity.setName(updatedEntity.getName());

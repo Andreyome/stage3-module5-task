@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
+@Transactional
 public class TagService implements TagServInterface {
     private final TagRepository tagRepository;
     private final TagMapper mapper;

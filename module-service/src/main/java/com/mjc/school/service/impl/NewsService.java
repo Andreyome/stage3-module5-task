@@ -10,9 +10,12 @@ import com.mjc.school.service.NewsServInterface;
 import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.dto.NewsDtoResponse;
 import com.mjc.school.service.exception.NotFoundException;
+import com.mjc.school.service.exception.ValidationException;
 import com.mjc.school.service.mapper.NewsMapper;
 import com.mjc.school.service.validate.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +45,12 @@ public class NewsService implements NewsServInterface {
     @Override
     @Transactional(readOnly = true)
     public List<NewsDtoResponse> readAll(Integer page, Integer limit, String sortBy) {
-        return newsRepository.readAll(page, limit, sortBy).stream().map(mapper::newsToDto).collect(Collectors.toList());
+        try {
+            return newsRepository.readAll(page, limit, sortBy).stream().map(mapper::newsToDto).collect(Collectors.toList());
+        }
+        catch (InvalidDataAccessApiUsageException e){
+            throw new ValidationException("Wrong parameters for method provided.");
+        }
     }
 
     @Override
@@ -55,7 +63,7 @@ public class NewsService implements NewsServInterface {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = DataIntegrityViolationException.class)
     public NewsDtoResponse create(NewsDtoRequest createRequest) {
         validator.validateNews(createRequest);
         createNonExistingAuthor(createRequest.authorName());

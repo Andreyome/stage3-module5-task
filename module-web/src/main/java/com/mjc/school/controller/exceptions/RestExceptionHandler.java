@@ -47,12 +47,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler(value = RuntimeException.class)
     protected ResponseEntity<CustomErrorResponse> handleNotFoundException(RuntimeException e, WebRequest request) {
-        return build(RESOURCE_NOT_FOUND.getCode(), e.getMessage(), HttpStatus.NOT_FOUND);
+        return build(RESOURCE_NOT_FOUND.getCode(), e.getClass().getName(), HttpStatus.NOT_FOUND);
     }
-//    @ExceptionHandler(value = NoHandlerFoundException.class)
-//    protected ResponseEntity<CustomErrorResponse> handleNotFoundException(NoHandlerFoundException e, WebRequest request) {
-//        return build(RESOURCE_NOT_FOUND.getCode(), e.getMessage(), HttpStatus.NOT_FOUND);
-//    }
 
 
     @Override
