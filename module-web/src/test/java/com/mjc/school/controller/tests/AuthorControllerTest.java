@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AuthorControllerTest {
@@ -28,6 +27,26 @@ public class AuthorControllerTest {
         given().request("Delete","author/"+id.longValue());
     }
     @Test
+    public void testCreateTwoAuthorsWithSameNameResultIn404(){
+        Integer id = given()
+                .contentType("application/json")
+                .body("{\"name\" : \"Robertson\"}")
+                .when()
+                .request("POST", "/author")
+                .then()
+                .statusCode(201)
+                .body("name",equalTo("Robertson")).extract().path("id");
+        given()
+                .contentType("application/json")
+                .body("{\"name\" : \"Robertson\"}")
+                .when()
+                .request("POST", "/author")
+                .then()
+                .statusCode(404)
+                .body("code",equalTo("400001"));
+        given().request("Delete","author/"+id.longValue());
+    }
+    @Test
     public void givenNoNValidRequest_whenCreateAuthor_thenReturn404(){
         given()
                 .contentType("application/json")
@@ -44,26 +63,26 @@ public class AuthorControllerTest {
         Response response = RestAssured.given()
                 .contentType("application/json")
                 .body("{\"name\" : \"Mark Aurelius\"}")
-                .request("POST","/author");
+                .request("POST","/author")
+                .then().statusCode(201).extract().response();
         given()
                 .request("GET", "/author/"+response.jsonPath().getLong("id"))
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("Mark Aurelius"));
         given().request("DELETE", "/author/"+response.jsonPath().getLong("id"));
-
     }
     @Test
-    public void createNewsTest(){
-        Response response= RestAssured.given()
+    public void testDeleteAuthor(){
+        Response response = RestAssured.given()
                 .contentType("application/json")
-                .body("{ \"authorName\": \"Author example\", \"content\": \"Content\", \"tagNames\": [ \"Tag name example\" ], \"title\": \"Title example\"}")
-                .when()
-                .request("POST","/news")
+                .body("{\"name\" : \"Mark Aurelius\"}")
+                .request("POST","/author")
+                .then().statusCode(201).extract().response();
+        given().request("DELETE", "/author/"+response.jsonPath().getLong("id")).then().statusCode(204);
+        given()
+                .request("GET", "/author/"+response.jsonPath().getLong("id"))
                 .then()
-                .statusCode(201)
-                .body("title",equalTo("Title example")).extract().response();
-        given().request("Delete","news/"+response.jsonPath().getLong("id"));
+                .statusCode(404);
     }
-
 }

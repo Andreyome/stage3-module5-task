@@ -65,14 +65,18 @@ public class NewsService implements NewsServInterface {
     @Override
     @Transactional(rollbackFor = DataIntegrityViolationException.class)
     public NewsDtoResponse create(NewsDtoRequest createRequest) {
-        validator.validateNews(createRequest);
-        createNonExistingAuthor(createRequest.authorName());
-        createNonExistingTags(createRequest.tagNames());
-        NewsModel newsModel = mapper.newsDtoToModel(createRequest);
-        newsModel.setCreateDate(LocalDateTime.now());
-        newsModel.setLastUpdateDate(LocalDateTime.now());
-        newsRepository.create(newsModel);
-        return mapper.newsToDto(newsModel);
+        try {
+            validator.validateNews(createRequest);
+            createNonExistingAuthor(createRequest.authorName());
+            createNonExistingTags(createRequest.tagNames());
+            NewsModel newsModel = mapper.newsDtoToModel(createRequest);
+            newsModel.setCreateDate(LocalDateTime.now());
+            newsModel.setLastUpdateDate(LocalDateTime.now());
+            newsRepository.create(newsModel);
+            return mapper.newsToDto(newsModel);
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Provided news info has already been used.");
+        }
     }
 
     @Override
@@ -81,6 +85,7 @@ public class NewsService implements NewsServInterface {
         if(!newsRepository.existById(id)){
             throw new NotFoundException("No news with provided id found");
         }
+        try {
         validator.validateNews(updateRequest);
         createNonExistingAuthor(updateRequest.authorName());
         createNonExistingTags(updateRequest.tagNames());
@@ -88,6 +93,9 @@ public class NewsService implements NewsServInterface {
         updatedNews.setLastUpdateDate(LocalDateTime.now());
         updatedNews.setCreateDate(newsRepository.readById(id).get().getCreateDate());
         return mapper.newsToDto(newsRepository.update(id, updatedNews));
+    } catch (DataIntegrityViolationException e) {
+        throw new ValidationException("Provided news info has already been used.");
+    }
     }
 
 

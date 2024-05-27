@@ -3,7 +3,6 @@ package com.mjc.school.controller.impl;
 import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.TagServInterface;
-import com.mjc.school.service.dto.NewsDtoResponse;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
 import io.swagger.annotations.Api;

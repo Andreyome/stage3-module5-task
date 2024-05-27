@@ -14,10 +14,10 @@ import java.util.Optional;
 public class AuthorRepositoryImpl extends AbstractDBRepository<AuthorModel, Long> implements AuthorRepository {
     @Override
     public List<AuthorModel> readAll(Integer page, Integer pageSize, String sortBy) {
-//        if(sortBy.split(":")[0].equalsIgnoreCase("newsCount")){
-//            String str = "SELECT a FROM AuthorModel a JOIN a.newsModelList n GROUP BY a ORDER BY COUNT(n) "+sortBy.split(":")[1];
-//            return entityManager.createQuery(str).getResultList();
-//        }
+        if(sortBy.split(":")[0].equalsIgnoreCase("newsCount")){
+            String str = "SELECT a FROM AuthorModel a JOIN a.newsModelList n GROUP BY a ORDER BY COUNT(n) "+sortBy.split(":")[1];
+            return entityManager.createQuery(str).getResultList();
+        }
         return super.readAll(page, pageSize, sortBy);
     }
 

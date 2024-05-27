@@ -3,7 +3,6 @@ package com.mjc.school.controller.impl;
 import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.Hateoas.HateoasHelper;
 import com.mjc.school.service.CommentServInterface;
-import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import io.swagger.annotations.Api;
@@ -67,7 +66,7 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create comment", response = CommentDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully created a comment"),
+            @ApiResponse(code = 201,message = "Successfully created a comment"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),

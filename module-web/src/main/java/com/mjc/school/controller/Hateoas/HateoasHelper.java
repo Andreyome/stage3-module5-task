@@ -1,6 +1,7 @@
 package com.mjc.school.controller.Hateoas;
 
 import com.mjc.school.controller.impl.AuthorController;
+import com.mjc.school.controller.impl.CommentController;
 import com.mjc.school.controller.impl.NewsController;
 import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.dto.CommentDtoResponse;
@@ -25,6 +26,9 @@ public class HateoasHelper {
     public static void addCommentLinks(EntityModel<CommentDtoResponse> dtoModel){
         CommentDtoResponse tmp = dtoModel.getContent();
         if (tmp == null) return;
+        dtoModel.add(linkTo(methodOn(CommentController.class).readById(tmp.id())).withSelfRel());
+        dtoModel.add(linkTo(methodOn(NewsController.class).readById(tmp.newsId())).withRel("news"));
+
     }
     public static void addNewsLinks(EntityModel<NewsDtoResponse> dtoModel){
         NewsDtoResponse tmp = dtoModel.getContent();

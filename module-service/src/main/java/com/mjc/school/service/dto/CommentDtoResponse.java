@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record CommentDtoResponse(Long id,
                                  String content,
                                  String createDate,
-                                 String lastUpdateDate
+                                 String lastUpdateDate,
+                                 Long newsId
 ) {
 }

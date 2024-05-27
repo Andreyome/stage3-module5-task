@@ -6,9 +6,11 @@ import com.mjc.school.service.TagServInterface;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
 import com.mjc.school.service.exception.NotFoundException;
+import com.mjc.school.service.exception.ValidationException;
 import com.mjc.school.service.mapper.TagMapper;
 import com.mjc.school.service.validate.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +49,13 @@ public class TagService implements TagServInterface {
     @Override
     @Transactional
     public TagDtoResponse create(TagDtoRequest createRequest) {
-        return mapper.tagToDto(tagRepository.create(mapper.tagDtoToModel(validator.validateTag(createRequest))));
+        try {
+            return mapper.tagToDto(tagRepository.create(mapper.tagDtoToModel(validator.validateTag(createRequest))));
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            throw  new ValidationException("Author name is already taken");
+        }
     }
 
     @Override
@@ -56,7 +64,14 @@ public class TagService implements TagServInterface {
         if(!tagRepository.existById(id)){
             throw new NotFoundException("No tags with provided id found");
         }
+        try {
         return mapper.tagToDto(tagRepository.update(id, mapper.tagDtoToModel(validator.validateTag(updateRequest))));
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            throw  new ValidationException("Author name is already taken");
+        }
+
     }
 
     @Override

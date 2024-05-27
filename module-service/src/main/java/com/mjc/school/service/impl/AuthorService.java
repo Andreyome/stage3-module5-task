@@ -11,6 +11,7 @@ import com.mjc.school.service.mapper.AuthorMapper;
 import com.mjc.school.service.validate.Validator;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,10 +50,13 @@ public class AuthorService implements AuthorServInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(AuthorDtoRequest createRequest) {
-//        if(authorRepositoryImpl.readByName(createRequest.name()).isPresent()){
-//            throw new ValidationException("Provided author name has already been taken.");
-//        }
-        return mapper.authorModelToDto(authorRepositoryImpl.create(mapper.authorDtoToModel(validator.validateAuthor(createRequest))));
+        try {
+            return mapper.authorModelToDto(authorRepositoryImpl.create(mapper.authorDtoToModel(validator.validateAuthor(createRequest))));
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            throw  new ValidationException("Author name is already taken");
+        }
     }
 
     @Override
@@ -61,7 +65,13 @@ public class AuthorService implements AuthorServInterface {
         if(!authorRepositoryImpl.existById(id)){
             throw new NotFoundException("No author with provided id found");
         }
-        return mapper.authorModelToDto(authorRepositoryImpl.update(id, mapper.authorDtoToModel(validator.validateAuthor(updateRequest))));
+        try {
+            return mapper.authorModelToDto(authorRepositoryImpl.update(id, mapper.authorDtoToModel(validator.validateAuthor(updateRequest))));
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            throw  new ValidationException("Author name is already taken");
+        }
     }
 
     @Override

@@ -13,16 +13,6 @@ import java.util.Optional;
 
 @Repository("NewsRepository")
 public class NewsRepositoryImpl extends AbstractDBRepository<NewsModel, Long> implements NewsRepository {
-//    @Override
-//    public NewsModel create(NewsModel entity) {
-//        List<NewsModel> existingNewsList = entityManager.createQuery("select n from NewsModel n where n.title = :title", NewsModel.class)
-//                .setParameter("title", entity.getTitle())
-//                .getResultList();
-//        if (!existingNewsList.isEmpty()) {
-//            throw new RuntimeException("A news entity with the same title already exists.");
-//        }
-//        return super.create(entity);
-//    }
 
     public List<NewsModel> readNewsByParams(List<Long> tagsIds, List<String> tagsNames, String authorName, String title, String content) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

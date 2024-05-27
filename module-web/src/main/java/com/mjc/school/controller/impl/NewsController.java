@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -149,8 +150,12 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public List<TagDtoResponse> getTagsByNewsId(@PathVariable Long id) {
-        return tagService.readByNewsId(id);
+    public List<EntityModel<TagDtoResponse>> getTagsByNewsId(@PathVariable Long id) {
+        List<TagDtoResponse> tagDto = tagService.readByNewsId(id);
+        List<EntityModel<TagDtoResponse>> result =new ArrayList<>();
+        tagDto.forEach(tagDtoResponse ->result.add(EntityModel.of(tagDtoResponse)));
+        result.forEach(HateoasHelper::addTagLinks);
+        return result;
     }
 
     @GetMapping(value = "/{id:\\d+}/comment")
@@ -164,8 +169,11 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 404, message = "Internal resource not found")
 
     })
-    public List<CommentDtoResponse> getCommentsByNewsId(@PathVariable Long id) {
-        return commentService.readByNewsId(id);
+    public List<EntityModel<CommentDtoResponse>> getCommentsByNewsId(@PathVariable Long id) {
+        List<EntityModel<CommentDtoResponse>> result =new ArrayList<>();
+        commentService.readByNewsId(id).forEach(tagDtoResponse ->result.add(EntityModel.of(tagDtoResponse)));
+        result.forEach(HateoasHelper::addCommentLinks);
+        return result;
     }
     @GetMapping(value = "/{id:\\d+}/author")
     @ResponseStatus(HttpStatus.OK)
@@ -177,7 +185,11 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 404, message = "Internal resource not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse getAuthorByNewsId(@PathVariable Long id) {
-        return authorService.getAuthorByNewsId(id);
+    public EntityModel<AuthorDtoResponse> getAuthorByNewsId(@PathVariable Long id) {
+        EntityModel<AuthorDtoResponse> result = EntityModel.of(authorService.getAuthorByNewsId(id));
+        HateoasHelper.addAuthorLinks(result);
+        return result;
     }
+
+
 }
