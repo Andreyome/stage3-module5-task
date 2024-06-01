@@ -5,7 +5,6 @@ import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.dto.NewsDtoResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NewsServInterface extends BaseService<NewsDtoRequest, NewsDtoResponse,Long> {
     List<NewsDtoResponse> readNewsByParams(List<Long> tagsIds, List<String> tagsNames, String authorName, String title, String content);

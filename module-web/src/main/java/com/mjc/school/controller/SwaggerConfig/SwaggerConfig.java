@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.mjc.school.controller"))
@@ -23,7 +23,8 @@ public class SwaggerConfig {
                 .apiInfo(appInfo());
 
     }
-    private ApiInfo appInfo(){
+
+    private ApiInfo appInfo() {
         return new ApiInfoBuilder()
                 .title("Small news management application")
                 .description("Small news management application using REST API")

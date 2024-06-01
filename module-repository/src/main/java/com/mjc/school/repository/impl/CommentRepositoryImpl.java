@@ -13,7 +13,8 @@ public class CommentRepositoryImpl extends AbstractDBRepository<CommentModel, Lo
     void updateExistingModel(CommentModel existingEntity, CommentModel updatedEntity) {
         existingEntity.setContent(updatedEntity.getContent());
     }
-@Override
+
+    @Override
     public List<CommentModel> readByNewsId(Long id) {
         try {
             return entityManager.createQuery("SELECT c FROM CommentModel c INNER JOIN c.newsModel n WHERE n.id =:id", CommentModel.class).setParameter("id", id).getResultList();

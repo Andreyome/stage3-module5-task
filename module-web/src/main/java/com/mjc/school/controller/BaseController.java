@@ -10,9 +10,9 @@ public interface BaseController<T, R, K> {
 
     EntityModel<R> readById(K id);
 
-    EntityModel<R> create( T createRequest);
+    EntityModel<R> create(T createRequest);
 
-    EntityModel<R> update(K Id,T updateRequest);
+    EntityModel<R> update(K Id, T updateRequest);
 
     void deleteById(K id);
 }

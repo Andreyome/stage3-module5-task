@@ -34,12 +34,12 @@ public class NewsService implements NewsServInterface {
 
 
     @Autowired
-    public NewsService(NewsRepository newsRepository, NewsMapper mapper, TagRepositoryImpl tagRepository, AuthorRepositoryImpl authorRepository,Validator validator) {
+    public NewsService(NewsRepository newsRepository, NewsMapper mapper, TagRepositoryImpl tagRepository, AuthorRepositoryImpl authorRepository, Validator validator) {
         this.newsRepository = newsRepository;
         this.mapper = mapper;
         this.tagRepository = tagRepository;
         this.authorRepository = authorRepository;
-        this.validator=validator;
+        this.validator = validator;
     }
 
     @Override
@@ -47,8 +47,7 @@ public class NewsService implements NewsServInterface {
     public List<NewsDtoResponse> readAll(Integer page, Integer limit, String sortBy) {
         try {
             return newsRepository.readAll(page, limit, sortBy).stream().map(mapper::newsToDto).collect(Collectors.toList());
-        }
-        catch (InvalidDataAccessApiUsageException e){
+        } catch (InvalidDataAccessApiUsageException e) {
             throw new ValidationException("Wrong parameters for method provided.");
         }
     }
@@ -82,20 +81,20 @@ public class NewsService implements NewsServInterface {
     @Override
     @Transactional
     public NewsDtoResponse update(Long id, NewsDtoRequest updateRequest) {
-        if(!newsRepository.existById(id)){
+        if (!newsRepository.existById(id)) {
             throw new NotFoundException("No news with provided id found");
         }
         try {
-        validator.validateNews(updateRequest);
-        createNonExistingAuthor(updateRequest.authorName());
-        createNonExistingTags(updateRequest.tagNames());
-        NewsModel updatedNews = mapper.newsDtoToModel(updateRequest);
-        updatedNews.setLastUpdateDate(LocalDateTime.now());
-        updatedNews.setCreateDate(newsRepository.readById(id).get().getCreateDate());
-        return mapper.newsToDto(newsRepository.update(id, updatedNews));
-    } catch (DataIntegrityViolationException e) {
-        throw new ValidationException("Provided news info has already been used.");
-    }
+            validator.validateNews(updateRequest);
+            createNonExistingAuthor(updateRequest.authorName());
+            createNonExistingTags(updateRequest.tagNames());
+            NewsModel updatedNews = mapper.newsDtoToModel(updateRequest);
+            updatedNews.setLastUpdateDate(LocalDateTime.now());
+            updatedNews.setCreateDate(newsRepository.readById(id).get().getCreateDate());
+            return mapper.newsToDto(newsRepository.update(id, updatedNews));
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Provided news info has already been used.");
+        }
     }
 
 
@@ -113,14 +112,16 @@ public class NewsService implements NewsServInterface {
 
     private void createNonExistingTags(List<String> tagNames) {
         tagNames.stream().filter(tagName -> tagRepository.readTagByName(tagName).isEmpty())
-                .forEach(nonExistTagName->{TagModel tag = new TagModel();
+                .forEach(nonExistTagName -> {
+                    TagModel tag = new TagModel();
                     tag.setName(nonExistTagName);
                     tagRepository.create(tag);
                 });
     }
-    private void createNonExistingAuthor(String name){
-        if(name!=null && !name.equals("")){
-            if(authorRepository.readByName(name).isEmpty()){
+
+    private void createNonExistingAuthor(String name) {
+        if (name != null && !name.equals("")) {
+            if (authorRepository.readByName(name).isEmpty()) {
                 AuthorModel authorModel = new AuthorModel();
                 authorModel.setName(name);
                 authorRepository.create(authorModel);

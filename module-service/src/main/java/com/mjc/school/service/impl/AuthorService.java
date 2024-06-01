@@ -28,9 +28,9 @@ public class AuthorService implements AuthorServInterface {
     private final Validator validator;
 
     @Autowired
-    protected AuthorService(AuthorRepositoryImpl authorRepositoryImpl,Validator validator) {
+    protected AuthorService(AuthorRepositoryImpl authorRepositoryImpl, Validator validator) {
         this.authorRepositoryImpl = authorRepositoryImpl;
-        this.validator=validator;
+        this.validator = validator;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AuthorService implements AuthorServInterface {
     public AuthorDtoResponse readById(Long id) {
         Optional<AuthorModel> authorModel = authorRepositoryImpl.readById(id);
         if (authorModel.isPresent()) return mapper.authorModelToDto(authorModel.get());
-        else throw new NotFoundException(String.format(AUTHOR_ID_DOES_NOT_EXIST.getErrorMessage(),id));
+        else throw new NotFoundException(String.format(AUTHOR_ID_DOES_NOT_EXIST.getErrorMessage(), id));
     }
 
     @Override
@@ -52,25 +52,21 @@ public class AuthorService implements AuthorServInterface {
     public AuthorDtoResponse create(AuthorDtoRequest createRequest) {
         try {
             return mapper.authorModelToDto(authorRepositoryImpl.create(mapper.authorDtoToModel(validator.validateAuthor(createRequest))));
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            throw  new ValidationException("Author name is already taken");
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Author name is already taken");
         }
     }
 
     @Override
     @Transactional
-    public AuthorDtoResponse update(Long id,AuthorDtoRequest updateRequest) {
-        if(!authorRepositoryImpl.existById(id)){
+    public AuthorDtoResponse update(Long id, AuthorDtoRequest updateRequest) {
+        if (!authorRepositoryImpl.existById(id)) {
             throw new NotFoundException("No author with provided id found");
         }
         try {
             return mapper.authorModelToDto(authorRepositoryImpl.update(id, mapper.authorDtoToModel(validator.validateAuthor(updateRequest))));
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            throw  new ValidationException("Author name is already taken");
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Author name is already taken");
         }
     }
 

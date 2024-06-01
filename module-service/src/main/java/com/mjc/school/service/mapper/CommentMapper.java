@@ -11,9 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     List<CommentDtoResponse> commentListToDto(List<CommentModel> input);
+
     @Mapping(target = "createDate", expression = "java(input.getCreateDate().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
     @Mapping(target = "lastUpdateDate", expression = "java(input.getLastUpdateDate().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
-    @Mapping(target = "newsId",expression = "java(input.getNewsModel().getId())")
+    @Mapping(target = "newsId", expression = "java(input.getNewsModel().getId())")
     CommentDtoResponse commentToDto(CommentModel input);
 
     @Mapping(target = "createDate", ignore = true)

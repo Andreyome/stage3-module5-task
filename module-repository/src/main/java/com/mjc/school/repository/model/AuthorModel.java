@@ -17,23 +17,26 @@ public class AuthorModel implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @Column(name = "createDate",nullable = false)
+    @Column(name = "createDate", nullable = false)
     @CreatedDate
     private LocalDateTime createDate;
-    @Column(name = "lastUpdateDate",nullable = false)
+    @Column(name = "lastUpdateDate", nullable = false)
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
-    @OneToMany(mappedBy = "authorModel",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE)
     private List<NewsModel> newsModelList;
+
     public AuthorModel() {
     }
-    public AuthorModel(String name,LocalDateTime createDate,LocalDateTime lastUpdateDate) {
+
+    public AuthorModel(String name, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.name = name;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
     }
+
     public void setId(Long id) {
         this.id = id;
     }

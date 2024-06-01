@@ -7,9 +7,7 @@ import com.mjc.school.repository.model.TagModel;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository("NewsRepository")
 public class NewsRepositoryImpl extends AbstractDBRepository<NewsModel, Long> implements NewsRepository {
@@ -20,23 +18,23 @@ public class NewsRepositoryImpl extends AbstractDBRepository<NewsModel, Long> im
         Root<NewsModel> root = criteriaQuery.from(NewsModel.class);
         criteriaQuery.select(root);
         Predicate predicate = criteriaBuilder.conjunction();
-        if (tagsIds!=null && !tagsIds.isEmpty()) {
+        if (tagsIds != null && !tagsIds.isEmpty()) {
             Join<TagModel, NewsModel> nt = root.join("tagModelList");
-            predicate= criteriaBuilder.and(predicate,nt.get("id").in(tagsIds));
+            predicate = criteriaBuilder.and(predicate, nt.get("id").in(tagsIds));
         }
-        if (tagsNames!=null && !tagsNames.isEmpty()) {
+        if (tagsNames != null && !tagsNames.isEmpty()) {
             Join<TagModel, NewsModel> nt = root.join("tagModelList");
-            predicate= criteriaBuilder.and(predicate,nt.get("name").in(tagsNames));
+            predicate = criteriaBuilder.and(predicate, nt.get("name").in(tagsNames));
         }
-        if (authorName!=null && !authorName.isBlank()) {
+        if (authorName != null && !authorName.isBlank()) {
             Join<AuthorModel, NewsModel> na = root.join("authorModel");
-            predicate=criteriaBuilder.and(predicate,criteriaBuilder.like(na.get("name"),"%"+authorName+"%"));
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(na.get("name"), "%" + authorName + "%"));
         }
-        if (title!=null && !title.isBlank()) {
-            predicate=criteriaBuilder.and(predicate,criteriaBuilder.like(root.get("title"),"%"+title+"%"));
+        if (title != null && !title.isBlank()) {
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("title"), "%" + title + "%"));
         }
-        if (content!=null && !content.isBlank()) {
-            predicate=criteriaBuilder.and(predicate,criteriaBuilder.like(root.get("content"),"%"+content+"%"));
+        if (content != null && !content.isBlank()) {
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("content"), "%" + content + "%"));
         }
         return entityManager.createQuery(criteriaQuery.where(predicate)).getResultList();
     }

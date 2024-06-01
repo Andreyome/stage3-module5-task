@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/news", produces = {"application/JSON"})
 @Api(produces = "application/JSON", value = "CRUD operations with News")
-public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResponse,Long> {
+public class NewsController implements BaseController<NewsDtoRequest, NewsDtoResponse, Long> {
     private final NewsServInterface newsService;
     private final TagServInterface tagService;
     private final CommentServInterface commentService;
@@ -101,7 +101,7 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
     public EntityModel<NewsDtoResponse> update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
-        EntityModel<NewsDtoResponse> result = EntityModel.of(newsService.update(id,updateRequest));
+        EntityModel<NewsDtoResponse> result = EntityModel.of(newsService.update(id, updateRequest));
         HateoasHelper.addNewsLinks(result);
         return result;
     }
@@ -152,8 +152,8 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
     })
     public List<EntityModel<TagDtoResponse>> getTagsByNewsId(@PathVariable Long id) {
         List<TagDtoResponse> tagDto = tagService.readByNewsId(id);
-        List<EntityModel<TagDtoResponse>> result =new ArrayList<>();
-        tagDto.forEach(tagDtoResponse ->result.add(EntityModel.of(tagDtoResponse)));
+        List<EntityModel<TagDtoResponse>> result = new ArrayList<>();
+        tagDto.forEach(tagDtoResponse -> result.add(EntityModel.of(tagDtoResponse)));
         result.forEach(HateoasHelper::addTagLinks);
         return result;
     }
@@ -170,16 +170,17 @@ public class NewsController implements BaseController<NewsDtoRequest,NewsDtoResp
 
     })
     public List<EntityModel<CommentDtoResponse>> getCommentsByNewsId(@PathVariable Long id) {
-        List<EntityModel<CommentDtoResponse>> result =new ArrayList<>();
-        commentService.readByNewsId(id).forEach(tagDtoResponse ->result.add(EntityModel.of(tagDtoResponse)));
+        List<EntityModel<CommentDtoResponse>> result = new ArrayList<>();
+        commentService.readByNewsId(id).forEach(tagDtoResponse -> result.add(EntityModel.of(tagDtoResponse)));
         result.forEach(HateoasHelper::addCommentLinks);
         return result;
     }
+
     @GetMapping(value = "/{id:\\d+}/author")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value= "Get author by news Id",response = AuthorDtoResponse.class)
+    @ApiOperation(value = "Get author by news Id", response = AuthorDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully retrieved author by news Id"),
+            @ApiResponse(code = 200, message = "Successfully retrieved author by news Id"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 404, message = "Internal resource not found"),

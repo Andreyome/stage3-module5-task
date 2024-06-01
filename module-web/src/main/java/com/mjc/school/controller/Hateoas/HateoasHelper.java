@@ -15,22 +15,25 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class HateoasHelper {
-    private HateoasHelper(){}
+    private HateoasHelper() {
+    }
 
-    public static void addAuthorLinks(EntityModel<AuthorDtoResponse> dtoModel){
+    public static void addAuthorLinks(EntityModel<AuthorDtoResponse> dtoModel) {
         AuthorDtoResponse tmp = dtoModel.getContent();
         if (tmp == null) return;
         dtoModel.add(linkTo(methodOn(AuthorController.class).readById(tmp.id())).withSelfRel());
-        dtoModel.add(linkTo(methodOn(NewsController.class).readNewsByParams(null,null,tmp.name(),null,null)).withRel("news"));
+        dtoModel.add(linkTo(methodOn(NewsController.class).readNewsByParams(null, null, tmp.name(), null, null)).withRel("news"));
     }
-    public static void addCommentLinks(EntityModel<CommentDtoResponse> dtoModel){
+
+    public static void addCommentLinks(EntityModel<CommentDtoResponse> dtoModel) {
         CommentDtoResponse tmp = dtoModel.getContent();
         if (tmp == null) return;
         dtoModel.add(linkTo(methodOn(CommentController.class).readById(tmp.id())).withSelfRel());
         dtoModel.add(linkTo(methodOn(NewsController.class).readById(tmp.newsId())).withRel("news"));
 
     }
-    public static void addNewsLinks(EntityModel<NewsDtoResponse> dtoModel){
+
+    public static void addNewsLinks(EntityModel<NewsDtoResponse> dtoModel) {
         NewsDtoResponse tmp = dtoModel.getContent();
         if (tmp == null) return;
         dtoModel.add(linkTo(methodOn(NewsController.class).readById(tmp.id())).withSelfRel());
@@ -39,10 +42,11 @@ public class HateoasHelper {
         dtoModel.add(linkTo(methodOn(NewsController.class).getCommentsByNewsId(tmp.id())).withRel("comments"));
 
     }
-    public static void addTagLinks(EntityModel<TagDtoResponse> dtoModel){
+
+    public static void addTagLinks(EntityModel<TagDtoResponse> dtoModel) {
         TagDtoResponse tmp = dtoModel.getContent();
         if (tmp == null) return;
-        dtoModel.add(linkTo(methodOn(NewsController.class).readNewsByParams(List.of(tmp.id()),null,tmp.name(),null,null)).withRel("news"));
+        dtoModel.add(linkTo(methodOn(NewsController.class).readNewsByParams(List.of(tmp.id()), null, tmp.name(), null, null)).withRel("news"));
 
     }
 

@@ -16,31 +16,34 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Component
 @RestController
-@RequestMapping(value = "/tag",  produces = {"application/JSON"})
+@RequestMapping(value = "/tag", produces = {"application/JSON"})
 @Api(produces = "application/JSON", value = "CRUD operations with Tags")
-public class TagsController implements BaseController<TagDtoRequest, TagDtoResponse,Long> {
+public class TagsController implements BaseController<TagDtoRequest, TagDtoResponse, Long> {
     private TagServInterface tagsService;
+
     @Autowired
-    public  TagsController(TagServInterface tagsService){
-        this.tagsService=tagsService;
+    public TagsController(TagServInterface tagsService) {
+        this.tagsService = tagsService;
     }
+
     @Override
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all tags", response = List.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully retrieved all tags"),
+            @ApiResponse(code = 200, message = "Successfully retrieved all tags"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public List<TagDtoResponse> readAll(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                        @RequestParam(value = "limit", required = false,defaultValue = "5") Integer limit,
-                                        @RequestParam(value = "sortBy",required = false,defaultValue = "name:desc") String sortBy) {
-        return tagsService.readAll( page, limit, sortBy);
+    public List<TagDtoResponse> readAll(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                        @RequestParam(value = "limit", required = false, defaultValue = "5") Integer limit,
+                                        @RequestParam(value = "sortBy", required = false, defaultValue = "name:desc") String sortBy) {
+        return tagsService.readAll(page, limit, sortBy);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get tags by Id", response = TagDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully retrieved tag by Id"),
+            @ApiResponse(code = 200, message = "Successfully retrieved tag by Id"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
@@ -65,13 +68,13 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create tag", response = TagDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully created tag"),
+            @ApiResponse(code = 200, message = "Successfully created tag"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public EntityModel<TagDtoResponse>  create(@RequestBody TagDtoRequest createRequest) {
+    public EntityModel<TagDtoResponse> create(@RequestBody TagDtoRequest createRequest) {
         EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.create(createRequest));
         HateoasHelper.addTagLinks(result);
         return result;
@@ -82,14 +85,14 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update tag", response = TagDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Successfully updated tag"),
+            @ApiResponse(code = 200, message = "Successfully updated tag"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Internal resource not found")
     })
-    public EntityModel<TagDtoResponse>  update(@PathVariable Long id,@RequestBody TagDtoRequest updateRequest) {
-        EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.update(id,updateRequest));
+    public EntityModel<TagDtoResponse> update(@PathVariable Long id, @RequestBody TagDtoRequest updateRequest) {
+        EntityModel<TagDtoResponse> result = EntityModel.of(tagsService.update(id, updateRequest));
         HateoasHelper.addTagLinks(result);
         return result;
     }
@@ -99,7 +102,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete tag by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 204,message = "Successfully deleted tag by Id"),
+            @ApiResponse(code = 204, message = "Successfully deleted tag by Id"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),

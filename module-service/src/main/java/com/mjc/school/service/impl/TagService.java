@@ -28,7 +28,7 @@ public class TagService implements TagServInterface {
     public TagService(TagRepository tagRepository, TagMapper mapper, Validator validator) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
-        this.validator=validator;
+        this.validator = validator;
     }
 
     @Override
@@ -51,25 +51,21 @@ public class TagService implements TagServInterface {
     public TagDtoResponse create(TagDtoRequest createRequest) {
         try {
             return mapper.tagToDto(tagRepository.create(mapper.tagDtoToModel(validator.validateTag(createRequest))));
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            throw  new ValidationException("Author name is already taken");
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Author name is already taken");
         }
     }
 
     @Override
     @Transactional
     public TagDtoResponse update(Long id, TagDtoRequest updateRequest) {
-        if(!tagRepository.existById(id)){
+        if (!tagRepository.existById(id)) {
             throw new NotFoundException("No tags with provided id found");
         }
         try {
-        return mapper.tagToDto(tagRepository.update(id, mapper.tagDtoToModel(validator.validateTag(updateRequest))));
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            throw  new ValidationException("Author name is already taken");
+            return mapper.tagToDto(tagRepository.update(id, mapper.tagDtoToModel(validator.validateTag(updateRequest))));
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Author name is already taken");
         }
 
     }

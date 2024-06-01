@@ -10,24 +10,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("TagRepository")
-public class TagRepositoryImpl extends AbstractDBRepository<TagModel,Long> implements TagRepository {
+public class TagRepositoryImpl extends AbstractDBRepository<TagModel, Long> implements TagRepository {
     @Override
     public List<TagModel> readByNewsId(Long id) {
-        return entityManager.createQuery("SELECT t FROM TagModel t INNER JOIN t.newsModelList n WHERE n.id=:id", TagModel.class).setParameter("id",id).getResultList();
+        return entityManager.createQuery("SELECT t FROM TagModel t INNER JOIN t.newsModelList n WHERE n.id=:id", TagModel.class).setParameter("id", id).getResultList();
     }
 
     @Override
-     void updateExistingModel(TagModel existingEntity, TagModel updatedEntity) {
+    void updateExistingModel(TagModel existingEntity, TagModel updatedEntity) {
         existingEntity.setName(updatedEntity.getName());
     }
-    public Optional<TagModel> readTagByName(String name){
+
+    public Optional<TagModel> readTagByName(String name) {
         TypedQuery<TagModel> tq = entityManager.createQuery(
-        "SELECT t FROM TagModel t WHERE t.name=:name",TagModel.class);
+                "SELECT t FROM TagModel t WHERE t.name=:name", TagModel.class);
         tq.setParameter("name", name);
-        try{
+        try {
             return Optional.of(tq.getSingleResult());
-        }
-        catch (NoResultException e){
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }

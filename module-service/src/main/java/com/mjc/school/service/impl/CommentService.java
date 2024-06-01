@@ -6,7 +6,6 @@ import com.mjc.school.repository.model.CommentModel;
 import com.mjc.school.service.CommentServInterface;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
-import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.exception.NotFoundException;
 import com.mjc.school.service.mapper.CommentMapper;
 import com.mjc.school.service.validate.Validator;
@@ -16,10 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 import static com.mjc.school.service.exception.ServiceExceptionCode.COMMENT_ID_DOES_NOT_EXIST;
-import static com.mjc.school.service.exception.ServiceExceptionCode.valueOf;
 
 @Service
 public class CommentService implements CommentServInterface {
@@ -30,11 +27,11 @@ public class CommentService implements CommentServInterface {
 
 
     @Autowired
-    public CommentService(CommentMapper mapper, CommentsRepository commentRepository,Validator validator,NewsRepository newsRepository) {
+    public CommentService(CommentMapper mapper, CommentsRepository commentRepository, Validator validator, NewsRepository newsRepository) {
         this.mapper = mapper;
         this.commentRepository = commentRepository;
-        this.validator=validator;
-        this.newsRepository=newsRepository;
+        this.validator = validator;
+        this.newsRepository = newsRepository;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class CommentService implements CommentServInterface {
         if (commentRepository.readById(id).isPresent()) {
             return mapper.commentToDto(commentRepository.readById(id).get());
         } else {
-            throw new NotFoundException(String.format(COMMENT_ID_DOES_NOT_EXIST.getErrorMessage(),id));
+            throw new NotFoundException(String.format(COMMENT_ID_DOES_NOT_EXIST.getErrorMessage(), id));
         }
     }
 
@@ -58,20 +55,19 @@ public class CommentService implements CommentServInterface {
     public CommentDtoResponse create(CommentDtoRequest createRequest) {
         validator.validateComment(createRequest);
         try {
-        CommentModel commentModel = mapper.commentDtoToModel(createRequest);
+            CommentModel commentModel = mapper.commentDtoToModel(createRequest);
             commentModel.setNewsModel(newsRepository.readById(createRequest.newsId()).get());
-        return mapper.commentToDto(commentRepository.create(commentModel));
-    }
-    catch (RuntimeException e){
-        throw new NotFoundException("No news with provided id.");
-    }
+            return mapper.commentToDto(commentRepository.create(commentModel));
+        } catch (RuntimeException e) {
+            throw new NotFoundException("No news with provided id.");
+        }
     }
 
     @Override
     @Transactional
-    public CommentDtoResponse update(Long id,CommentDtoRequest updateRequest) {
+    public CommentDtoResponse update(Long id, CommentDtoRequest updateRequest) {
         if (commentRepository.existById(id)) {
-            return mapper.commentToDto(commentRepository.update(id,mapper.commentDtoToModel(validator.validateComment(updateRequest))));
+            return mapper.commentToDto(commentRepository.update(id, mapper.commentDtoToModel(validator.validateComment(updateRequest))));
         } else {
             throw new EntityNotFoundException("Comment with provided Id not Found!");
         }

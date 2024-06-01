@@ -14,33 +14,44 @@ public class TagModel implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
     @ManyToMany(mappedBy = "tagModelList", fetch = FetchType.LAZY)
     private List<NewsModel> newsModelList;
-    public void TagModel(){}
-    public void TagModel(String name,List<NewsModel> newsModelList){
-        this.name=name;
-        this.newsModelList=newsModelList;
+
+    public void TagModel() {
     }
+
+    public void TagModel(String name, List<NewsModel> newsModelList) {
+        this.name = name;
+        this.newsModelList = newsModelList;
+    }
+
     @Override
     public Long getId() {
         return id;
     }
+
     @Override
     public void setId(Long id) {
-        this.id=id;
+        this.id = id;
     }
-    public List<NewsModel> getNewsModelList(){return newsModelList;}
+
+    public List<NewsModel> getNewsModelList() {
+        return newsModelList;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public void setName(String name){
-        this.name=name;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

@@ -24,15 +24,15 @@ import static com.mjc.school.service.exception.ServiceExceptionCode.*;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = JdbcSQLIntegrityConstraintViolationException.class)
     protected ResponseEntity<CustomErrorResponse> handleValidationException(JdbcSQLIntegrityConstraintViolationException e, WebRequest request) {
-            if(e.getMessage().contains("AUTHORS")){
-                return build(VALIDATION_EXCEPTION.getCode(), "Author name has been taken", HttpStatus.NOT_FOUND);
+        if (e.getMessage().contains("AUTHORS")) {
+            return build(VALIDATION_EXCEPTION.getCode(), "Author name has been taken", HttpStatus.NOT_FOUND);
         }
-            if(e.getMessage().contains("NEWS")){
-                return build(VALIDATION_EXCEPTION.getCode(), "News title has been taken", HttpStatus.NOT_FOUND);
-            }
-            if(e.getMessage().contains("TAGS")){
-                return build(VALIDATION_EXCEPTION.getCode(), "Tag name has been taken", HttpStatus.NOT_FOUND);
-            }
+        if (e.getMessage().contains("NEWS")) {
+            return build(VALIDATION_EXCEPTION.getCode(), "News title has been taken", HttpStatus.NOT_FOUND);
+        }
+        if (e.getMessage().contains("TAGS")) {
+            return build(VALIDATION_EXCEPTION.getCode(), "Tag name has been taken", HttpStatus.NOT_FOUND);
+        }
         return build(e.getMessage(), e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
@@ -45,6 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<CustomErrorResponse> handleNotFoundException(NotFoundException e, WebRequest request) {
         return build(RESOURCE_NOT_FOUND.getCode(), e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(value = RuntimeException.class)
     protected ResponseEntity<CustomErrorResponse> handleNotFoundException(RuntimeException e, WebRequest request) {
         return build(RESOURCE_NOT_FOUND.getCode(), e.getClass().getName(), HttpStatus.NOT_FOUND);

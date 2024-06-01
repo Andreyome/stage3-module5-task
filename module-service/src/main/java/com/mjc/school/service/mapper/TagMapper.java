@@ -14,9 +14,10 @@ import java.util.List;
 public interface TagMapper {
 
     List<TagDtoResponse> tagListToDto(List<TagModel> tagModelList);
+
     TagDtoResponse tagToDto(TagModel tagModel);
 
     @Mapping(target = "newsModelList", ignore = true)
-    @Mapping(target = "id",ignore = true)
+    @Mapping(target = "id", ignore = true)
     TagModel tagDtoToModel(TagDtoRequest newsDtoRequest);
 }

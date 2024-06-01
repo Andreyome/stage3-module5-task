@@ -2,8 +2,6 @@ package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.model.BaseEntity;
-import org.hibernate.PersistentObjectException;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +12,7 @@ import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
+
 @SuppressWarnings(value = "unchecked")
 public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implements BaseRepository<T, K> {
     @PersistenceContext
@@ -29,7 +28,7 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
 
     @Override
     public List<T> readAll(Integer page, Integer pageSize, String sortBy) {
-        int count = (page-1) * pageSize;
+        int count = (page - 1) * pageSize;
         String[] sortBySpecification = sortBy.split(":");
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
@@ -54,14 +53,14 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
 
     @Override
     public T create(T entity) {
-            entityManager.persist(entity);
-            entityManager.flush();
-            return entity;
+        entityManager.persist(entity);
+        entityManager.flush();
+        return entity;
     }
 
     @Override
-    public T update(K id,T entity) {
-        T existingModel = entityManager.find(entityClass,id);
+    public T update(K id, T entity) {
+        T existingModel = entityManager.find(entityClass, id);
         updateExistingModel(existingModel, entity);
         entityManager.flush();
         return existingModel;

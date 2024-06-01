@@ -38,8 +38,8 @@ public abstract class NewsMapper {
 
     @Mapping(target = "lastUpdateDate", ignore = true)
     @Mapping(target = "createDate", ignore = true)
-    @Mapping(target = "commentsModelList",ignore = true)
-    @Mapping(target = "id",ignore = true)
+    @Mapping(target = "commentsModelList", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "tagModelList", expression = "java(newsDtoRequest.tagNames().stream().map(name->tagRepositoryImpl.readTagByName(name).get()).toList())")
     @Mapping(target = "authorModel", expression = "java(authorRepositoryImpl.readByName(newsDtoRequest.authorName()).get())")
     public abstract NewsModel newsDtoToModel(NewsDtoRequest newsDtoRequest);

@@ -1,6 +1,5 @@
 package com.mjc.school.service.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record NewsDtoResponse(Long id,
