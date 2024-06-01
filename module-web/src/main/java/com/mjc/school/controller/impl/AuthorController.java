@@ -14,7 +14,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping(value = "/author", produces = {"application/JSON"})
@@ -74,7 +73,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Internal resource not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public EntityModel<AuthorDtoResponse> create(@Valid @RequestBody AuthorDtoRequest createRequest) {
+    public EntityModel<AuthorDtoResponse> create( @RequestBody AuthorDtoRequest createRequest) {
         EntityModel<AuthorDtoResponse> result = EntityModel.of(authorService.create(createRequest));
         HateoasHelper.addAuthorLinks(result);
         return result;

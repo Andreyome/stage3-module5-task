@@ -28,18 +28,15 @@ subprojects {
         testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
         testImplementation 'org.assertj:assertj-core:3.19.0'
         implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-web:2.7.7'
         implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.7.7"
         implementation 'com.h2database:h2:2.1.214'
         implementation 'javax.xml.bind:jaxb-api:2.3.1'
-        implementation 'javax.validation:validation-api:2.0.1.Final'
         annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
         implementation 'org.springframework.boot:spring-boot-starter-hateoas:2.7.7'
 
         testImplementation 'io.rest-assured:rest-assured:5.4.0'
-        implementation 'org.slf4j:slf4j-api:1.7.36'
         testImplementation 'org.hamcrest:hamcrest:2.2'
 
         runtimeOnly 'com.h2database:h2'
