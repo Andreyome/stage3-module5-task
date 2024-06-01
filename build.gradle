@@ -47,15 +47,15 @@ subprojects {
     }
 }
 
-task repack(type: Jar, dependsOn: ':module-web:build') {
-    if (findProject(':module-web') != null) {
-        entryCompression = ZipEntryCompression.STORED
-        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.jar")
-        from(buildJar) { into('/') }
-        manifest {
-            attributes(
-                    'Main-Class': 'com.mjc.school.controller'
-            )
-        }
-    }
-}
+//task repack(type: Jar, dependsOn: ':module-web:build') {
+//    if (findProject(':module-web') != null) {
+//        entryCompression = ZipEntryCompression.STORED
+//        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.jar")
+//        from(buildJar) { into('/') }
+//        manifest {
+//            attributes(
+//                    'Main-Class': 'com.mjc.school.controller'
+//            )
+//        }
+//    }
+//}
