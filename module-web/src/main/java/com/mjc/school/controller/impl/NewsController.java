@@ -77,7 +77,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create news", response = NewsDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created news"),
+            @ApiResponse(code = 201, message = "Successfully created news"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
@@ -90,7 +90,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     }
 
     @Override
-    @PutMapping(value = "/{id:\\d+}")
+    @PatchMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update news", response = NewsDtoResponse.class)
     @ApiResponses(value = {

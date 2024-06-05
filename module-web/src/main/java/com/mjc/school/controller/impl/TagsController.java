@@ -68,7 +68,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create tag", response = TagDtoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created tag"),
+            @ApiResponse(code = 201, message = "Successfully created tag"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 500, message = "Internal server error"),
@@ -81,7 +81,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     }
 
     @Override
-    @PutMapping(value = "/{id:\\d+}")
+    @PatchMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update tag", response = TagDtoResponse.class)
     @ApiResponses(value = {
