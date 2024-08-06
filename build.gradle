@@ -1,9 +1,16 @@
 plugins {
     id 'java-base'
+    id "org.sonarqube" version "5.0.0.4638"
 }
 
 wrapper {
     gradleVersion = gradlewVersion
+}
+sonar {
+    properties {
+        property "sonar.projectKey", "News-Management-App"
+        property "sonar.projectName", "News Management App"
+    }
 }
 
 subprojects {
