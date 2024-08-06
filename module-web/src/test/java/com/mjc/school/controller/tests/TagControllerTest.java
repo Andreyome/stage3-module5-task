@@ -45,7 +45,7 @@ public class TagControllerTest {
                 .body("name", equalTo(tagExample.split("[:,\"]+")[2])).extract().response();
         System.out.println("Test Tag created" + "\n" + response.asPrettyString());
         Long id = response.jsonPath().getLong("id");
-        given().contentType("application/json").body("{\"name\" : \"Old news\"}").when().put("/tag/" + id).then().statusCode(200).body("name", equalTo("Old news"));
+        given().contentType("application/json").body("{\"name\" : \"Old news\"}").when().patch("/tag/" + id).then().statusCode(200).body("name", equalTo("Old news"));
         given().request("Delete", "tag/" + id).then().statusCode(204);
         System.out.println("Tmp info deleted. Test finished");
     }

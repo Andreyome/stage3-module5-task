@@ -64,7 +64,7 @@ public class CommentControllerTest {
                 .body(String.format(a))
                 .when().request("POST", "/comment").then().statusCode(201)
                 .body("content", equalTo(a.split("[:,\"]+")[2])).extract().jsonPath().getLong("id")));
-        given().contentType("application/json").body(updatedComment).put("/comment/" + commentIds.get(0)).then().statusCode(200);
+        given().contentType("application/json").body(updatedComment).patch("/comment/" + commentIds.get(0)).then().statusCode(200);
         NewsControllerTest.deleteTmp(response);
     }
 

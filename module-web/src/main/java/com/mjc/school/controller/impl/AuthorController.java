@@ -107,7 +107,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized access"),
             @ApiResponse(code = 404, message = "Internal resource not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(code = 500, message = "Internal server error"),
     })
     public void deleteById(@PathVariable Long id) {
         authorService.deleteById(id);
