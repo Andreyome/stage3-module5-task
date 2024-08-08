@@ -8,8 +8,8 @@ wrapper {
 }
 sonar {
     properties {
-        property "sonar.projectKey", "News-Management-App"
-        property "sonar.projectName", "News Management App"
+        property "sonar.projectKey", "App"
+        property "sonar.projectName", "App"
     }
 }
 
