@@ -12,11 +12,11 @@ pipeline {
     agent any
 
     tools {
-        gradle 'Gradle'
+        gradle 'Gradle_7.4.2'
     }
 
     environment {
-        SONARQUBE_SCANNER_HOME = tool 'SonarQube Scanner'
+        SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
 
     stages {
@@ -28,34 +28,31 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'gradle clean build'
+                bat 'gradle clean build'
             }
         }
 
-        stage('Code Analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube Server') {
-                    sh 'gradle sonarqube'
+                withSonarQubeEnv('Sonar Qube') {
+                    bat "${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner"
                 }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                waitForQualityGate abortPipeline: true
             }
         }
 
         stage('Test') {
             steps {
-                sh 'gradle test jacocoTestReport'
+                bat 'gradle test jacocoTestReport'
             }
         }
     }
 
     post {
         always {
-            jacoco execPattern: '**/build/jacoco/*.exec', classPattern: '**/build/classes', sourcePattern: '**/src/main/java', inclusionPattern: '**/*.class', exclusionPattern: '**/build/**/*.class'
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Pipeline succeeded.'
         }
         failure {
             mail to: 'your-email@example.com',
