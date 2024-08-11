@@ -4,7 +4,7 @@ node {
   }
   stage('SonarQube Analysis') {
     withSonarQubeEnv() {
-      sh "./gradlew sonar"
+      bat "./gradlew sonar"
     }
   }
 }
