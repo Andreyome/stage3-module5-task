@@ -10,6 +10,7 @@ sonar {
     properties {
         property "sonar.projectKey", "App-test"
         property "sonar.projectName", "App test"
+        property "sonar.login", "squ_1a848c723a38d96aa0f04673d0851d7f2990f2fe"  
     }
 }
 
