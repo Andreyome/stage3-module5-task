@@ -36,18 +36,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            echo 'Pipeline finished.'
-        }
-        success {
-            echo 'Pipeline succeeded.'
-        }
-        failure {
-            mail to: 'your-email@example.com',
-                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Something went wrong with ${env.JOB_NAME}."
-        }
-    }
 }
