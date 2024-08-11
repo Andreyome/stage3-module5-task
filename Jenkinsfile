@@ -50,14 +50,4 @@ pipeline {
                  body: "Something went wrong with ${env.JOB_NAME}."
         }
     }
-    node {
-      stage('SCM') {
-        checkout scm
-      }
-      stage('SonarQube Analysis') {
-        withSonarQubeEnv() {
-          bat "./gradlew sonar"
-        }
-      }
-    }
 }
