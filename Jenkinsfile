@@ -1,14 +1,3 @@
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    withSonarQubeEnv() {
-      bat "./gradlew sonar"
-    }
-  }
-}
-
 pipeline {
     agent any
 
@@ -60,5 +49,15 @@ pipeline {
                  subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                  body: "Something went wrong with ${env.JOB_NAME}."
         }
+    }
+    node {
+      stage('SCM') {
+        checkout scm
+      }
+      stage('SonarQube Analysis') {
+        withSonarQubeEnv() {
+          bat "./gradlew sonar"
+        }
+      }
     }
 }
