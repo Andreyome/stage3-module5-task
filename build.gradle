@@ -11,7 +11,6 @@ sonar {
         property "sonar.projectKey", "App-test"
         property "sonar.projectName", "App test"
         property "sonar.token", "squ_1a848c723a38d96aa0f04673d0851d7f2990f2fe"
-        property "sonar.java.binaries", "module-repository/build/classes,module-service/build/classes,module-web/build/classes"
     }
 }
 
