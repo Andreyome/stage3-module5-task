@@ -8,7 +8,6 @@ node {
     }
   }
 }
-
 pipeline {
     agent any
 
