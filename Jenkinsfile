@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -61,14 +60,4 @@ pipeline {
         }
       }
     }
-}
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    withSonarQubeEnv() {
-      bat "./gradlew sonar"
-    }
-  }
 }
