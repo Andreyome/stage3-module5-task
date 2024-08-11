@@ -12,7 +12,7 @@ pipeline {
     agent any
 
     tools {
-        gradle 'Gradle_7.4.2'
+        gradle 'Gradle'
     }
 
     environment {
