@@ -26,8 +26,7 @@ pipeline {
             steps {
             bat 'gradle sonarqube'
 //                 withSonarQubeEnv('Sonar Qube') {
-//                     bat "${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner"
-                }
+//                     bat "${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner"}
             }
         }
 
