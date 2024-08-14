@@ -13,6 +13,7 @@ public class TagControllerTest {
     public static void initiate() {
         RestAssured.baseURI = "http://localhost:8082";
         RestAssured.port = 8082;
+        
     }
 
     String tagExample = "{\"name\":\"Breaking news\"}";
