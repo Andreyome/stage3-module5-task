@@ -1,8 +1,11 @@
 plugins {
     id 'java-base'
     id "org.sonarqube" version "5.0.0.4638"
+    id 'jacoco'
 }
-
+jacoco {
+    toolVersion = "0.8.8"
+}
 wrapper {
     gradleVersion = gradlewVersion
 }
@@ -28,6 +31,8 @@ subprojects {
     }
 
     dependencies {
+        implementation 'org.postgresql:postgresql:42.5.1'
+
         implementation "org.springframework:spring-context:$springVersion"
         testImplementation "org.springframework:spring-test:$springVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
@@ -53,6 +58,16 @@ subprojects {
     }
     test {
         useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+    jacocoTestReport {
+        dependsOn test
+
+        reports {
+            xml.required = true
+            csv.required = false
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
     }
 }
 
