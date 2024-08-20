@@ -4,10 +4,13 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
+@SpringBootTest
 public class TagControllerTest {
     @BeforeAll
     public static void initiate() {
@@ -19,6 +22,8 @@ public class TagControllerTest {
     String tagExample = "{\"name\":\"Breaking news\"}";
 
     @Test
+    @Transactional
+    @Rollback
     public void testCreateTag() {
         Response response = RestAssured.given()
                 .contentType("application/json")
@@ -35,6 +40,8 @@ public class TagControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUpdateTag() {
         Response response = RestAssured.given()
                 .contentType("application/json")
@@ -52,6 +59,8 @@ public class TagControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testDeleteTag() {
         Response response = RestAssured.given()
                 .contentType("application/json")

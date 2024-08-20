@@ -5,6 +5,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,7 @@ import java.util.List;
 import static com.mjc.school.controller.tests.CommentControllerTest.commentExample;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
+@SpringBootTest
 public class NewsControllerTest {
     public static String newsExample = "{ \"authorName\": \"Author example\", \"content\": \"Content example\", \"tagNames\": [ \"Tag name example\",\"Tag example name 2\" ], \"title\": \"Title example\"}";
 
@@ -23,6 +27,8 @@ public class NewsControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void createNewsTest() {
         Response response = RestAssured.given()
                 .contentType("application/json")
@@ -36,6 +42,8 @@ public class NewsControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void findNewsByIdTest() {
         Response response = createTmpNews();
         given().request("GET", "/news/" + response.jsonPath().getLong("id"))
@@ -46,6 +54,8 @@ public class NewsControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testMethodsGetTagCommentAuthorByNewsId() {
         System.out.println("Test for methods to get Tag/Comment/Author By NewsId Started.");
         Response response = createTmpNews();
@@ -86,6 +96,8 @@ public class NewsControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testSearchNewsByParams() {
         System.out.println("Test for methods to get News by params Started.");
         Response response = createTmpNews();

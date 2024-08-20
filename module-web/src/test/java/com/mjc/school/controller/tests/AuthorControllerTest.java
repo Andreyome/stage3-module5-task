@@ -4,10 +4,19 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+@SpringBootTest
+@ActiveProfiles("test")
+@Transactional
+@Rollback
 public class AuthorControllerTest {
     @BeforeAll
     public static void initiate() {
@@ -16,6 +25,8 @@ public class AuthorControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void givenValidRequest_whenCreateAuthor_thenReturn201() {
         Integer id = given()
                 .contentType("application/json")
@@ -29,6 +40,8 @@ public class AuthorControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testCreateTwoAuthorsWithSameNameResultIn404() {
         Integer id = given()
                 .contentType("application/json")
@@ -50,6 +63,8 @@ public class AuthorControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void givenNoNValidRequest_whenCreateAuthor_thenReturn404() {
         given()
                 .contentType("application/json")
@@ -63,6 +78,8 @@ public class AuthorControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testReadByIdMethod() {
         Response response = RestAssured.given()
                 .contentType("application/json")
@@ -78,6 +95,8 @@ public class AuthorControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testDeleteAuthor() {
         Response response = RestAssured.given()
                 .contentType("application/json")

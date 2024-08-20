@@ -32,16 +32,7 @@ subprojects {
 
     dependencies {
         implementation 'org.postgresql:postgresql:42.5.1'
-
         implementation "org.springframework:spring-context:$springVersion"
-        testImplementation "org.springframework:spring-test:$springVersion"
-        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
-        testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
-        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
-        testImplementation "com.tngtech.archunit:archunit:$archUnitVersion"
-        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
-        testImplementation 'org.assertj:assertj-core:3.19.0'
-        implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
         implementation 'org.springframework.boot:spring-boot-starter-web:2.7.7'
         implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.7.7"
         implementation 'com.h2database:h2:2.1.214'
@@ -50,8 +41,17 @@ subprojects {
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
         implementation 'org.springframework.boot:spring-boot-starter-hateoas:2.7.7'
 
+        testImplementation "org.springframework:spring-test:$springVersion"
+        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
+        testImplementation "com.tngtech.archunit:archunit:$archUnitVersion"
+        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
+        testImplementation 'org.assertj:assertj-core:3.19.0'
         testImplementation 'io.rest-assured:rest-assured:5.4.0'
         testImplementation 'org.hamcrest:hamcrest:2.2'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.7'
+        testImplementation 'com.h2database:h2'
 
         runtimeOnly 'com.h2database:h2'
 
@@ -67,6 +67,18 @@ subprojects {
             xml.required = true
             csv.required = false
             html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
+    }
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                element = 'CLASS'
+                limit {
+                    counter = 'INSTRUCTION'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+            }
         }
     }
 }

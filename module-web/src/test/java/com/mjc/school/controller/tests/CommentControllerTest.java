@@ -4,13 +4,17 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
+@SpringBootTest
 public class CommentControllerTest {
     public static final String commentExample = "{\"content\":\"Comment example\" , \"newsId\": ";
 
@@ -21,6 +25,8 @@ public class CommentControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testCreateComment() {
         Response response = NewsControllerTest.createTmpNews();
         Long newsId = response.jsonPath().getLong("id");
@@ -36,6 +42,8 @@ public class CommentControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testDeleteComment() {
         Response response = NewsControllerTest.createTmpNews();
         Long newsId = response.jsonPath().getLong("id");
@@ -52,6 +60,8 @@ public class CommentControllerTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUpdateComment() {
         Response response = NewsControllerTest.createTmpNews();
         Long newsId = response.jsonPath().getLong("id");
