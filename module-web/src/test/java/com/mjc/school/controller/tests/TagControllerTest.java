@@ -19,7 +19,7 @@ public class TagControllerTest {
         
     }
 
-    String tagExample = "{\"name\":\"Breaking news\"}";
+    String tagExample = "{\"name\":\"TestingTag\"}";
 
     @Test
     @Transactional
