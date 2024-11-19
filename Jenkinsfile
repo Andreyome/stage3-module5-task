@@ -4,6 +4,9 @@ pipeline {
     tools {
         gradle 'Gradle_7.4.2'
     }
+      triggers {
+        githubPush()
+      }
 
     environment {
         SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
